@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="horizontal"
+	android:gravity="fill" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" 
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- PARENT -->
+	<TextView android:id="@+id/parentname"
+		android:paddingLeft="5px"
+		android:paddingRight="5px"
+		android:paddingTop="3px"
+		android:paddingBottom="3px"
+		android:textStyle="bold"
+		android:textSize="25dp"
+		android:layout_gravity="fill_horizontal"
+		android:gravity="left|center_vertical"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content" />
+	<CheckBox android:id="@+id/checkbox"
+		android:focusable="false"
+		android:layout_alignParentRight="true"
+		android:freezesText="false"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5px" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SetTime"
+        android:onClick="setTime"
+        android:focusable="false"
+        android:id="@+id/timeset"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/checkbox"
+        android:layout_marginRight="40dp" />
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\practice_studio\\CheckedExpandableListSample\\app\\build\\intermediates\\res\\merged\\debug\\layout\\grouprow.xml",
+        "source": "D:\\practice_studio\\CheckedExpandableListSample\\app\\src\\main\\res\\layout\\grouprow.xml"
+    },
+    {
+        "merged": "D:\\practice_studio\\CheckedExpandableListSample\\app\\build\\intermediates\\res\\merged\\debug\\layout\\childrow.xml",
+        "source": "D:\\practice_studio\\CheckedExpandableListSample\\app\\src\\main\\res\\layout\\childrow.xml"
+    },
+    {
+        "merged": "D:\\practice_studio\\CheckedExpandableListSample\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_set_time_dialog.xml",
+        "source": "D:\\practice_studio\\CheckedExpandableListSample\\app\\src\\main\\res\\layout\\activity_set_time_dialog.xml"
+    }
+]
