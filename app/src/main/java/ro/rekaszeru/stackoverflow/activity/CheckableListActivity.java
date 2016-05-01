@@ -19,8 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import ro.rekaszeru.stackoverflow.Music.MusicPlayerInfo;
 import ro.rekaszeru.stackoverflow.R;
+import ro.rekaszeru.stackoverflow.Utils.DL;
 import ro.rekaszeru.stackoverflow.data.Child;
 import ro.rekaszeru.stackoverflow.data.Parent;
 
@@ -32,7 +39,7 @@ public class CheckableListActivity extends ExpandableListActivity
 	private static final String STR_UNREGISTERED = " has unregistered!";
 	
 	private ArrayList<Parent> parents;
-	
+	String futureTime ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -47,24 +54,45 @@ public class CheckableListActivity extends ExpandableListActivity
 		final ArrayList<Parent> dummyList = buildDummyData();
 		loadHosts(dummyList);
 	}
-	
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		// check if the request code is same as what is passed  here it is 2
+		if(requestCode==2)
+		{
+			 futureTime=data.getStringExtra("MESSAGE");
+
+		}}
+
 	/**
 	 * here should come your data service implementation
 	 * @return
 	 */
 	private ArrayList<Parent> buildDummyData()
 	{
+		MusicPlayerInfo musicPlayerInfo =  new  MusicPlayerInfo(this);
+
+		HashMap<String, List<String>>  defaultMusicPlayList = musicPlayerInfo.getdefaultMusicPlayList();
+
 		final ArrayList<Parent> list = new ArrayList<Parent>();
-		for (int i = 0; i < 20; i++)
-		{
+		Iterator it = defaultMusicPlayList.entrySet().iterator();
+
+		while(it.hasNext()) {
+
+			Map.Entry<String,List<String>> entry= (Map.Entry<String, List<String>>) it.next();
 			final Parent parent = new Parent();
-			parent.setName("Parent " + i);
-			parent.setChecked((i % 2) == 0);
+			String key= entry.getKey();
+            ArrayList<String> songs = (ArrayList<String>) entry.getValue();
+
+
+			parent.setName(key );
+//			parent.setChecked((i % 2) == 0);
 			parent.setChildren(new ArrayList<Child>());
-			for (int j = 0; j < 25 - i; j++)
+			for (int j = 0; j < songs.size(); j++)
 			{
 				final Child child = new Child();
-				child.setName("Child " + i + "/" + j);
+				child.setName(songs.get(j));
 				parent.getChildren().add(child);
 			}
 			list.add(parent);
@@ -173,9 +201,9 @@ public class CheckableListActivity extends ExpandableListActivity
 					Button sel = (Button)v;
 					sel.setTextColor(Color.GREEN);
 					sel.setTextSize(25);
-					sel.setText("12:34 AM");
+					sel.setText( futureTime);
 					Intent intent = new Intent(getApplicationContext(),SetTimeDialog.class);
-					startActivity(intent);
+					startActivityForResult(intent,2);
 				}
 			});
 			return convertView;
