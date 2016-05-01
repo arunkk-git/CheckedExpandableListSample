@@ -16,17 +16,20 @@ import ro.rekaszeru.stackoverflow.Utils.DL;
 /**
  * Created by ananth on 5/1/2016.
  */
+
 public class MusicPlayerInfo {
 
+
+
     Context context;
+    HashMap<String, List<SongDetails>> playListAndSongsInfo;
     public     MusicPlayerInfo(Context context){
         this.context = context;
+        this.playListAndSongsInfo = new HashMap<String, List<SongDetails>>();
     }
 
-    HashMap<String, List<String>> playListAndSongsInfo = new HashMap<String, List<String>>();
 
-
-    public HashMap<String, List<String>>   getdefaultMusicPlayList(){
+    public HashMap<String, List<SongDetails>>   getdefaultMusicPlayList(){
         int index = 0 ;
         ArrayList<String> defaultPlayList;
         final MediaPlayer player = new MediaPlayer();
@@ -91,25 +94,33 @@ public class MusicPlayerInfo {
             DL.p("Numeber of Songs in playList " + count);
             tracks.moveToFirst();
             String songInfo ;
-            List<String> songsListOfPlayList = new ArrayList<String>();
-
+            List<SongDetails> songsListOfPlayList = new ArrayList<SongDetails>(); ////
+            SongDetails songDetails;
             do {
 
                 int  duration=(Integer.parseInt(tracks.getString(tracks.getColumnIndex(duriationKey))))/1000;
                 int min = duration / 60 ;
                 int sec = duration % 60 ;
-                final String dataPath = tracks.getString(tracks.getColumnIndex(dataKey));
-                songInfo = (" >> \n " + tracks.getString(tracks.getColumnIndex(titleKey)) +
-                        "  [ " + min + " : " + sec + " ]\n path : " + dataPath);
 
-                songsListOfPlayList.add(songInfo);
+                final String dataPath = tracks.getString(tracks.getColumnIndex(dataKey));
+                final String title = tracks.getString(tracks.getColumnIndex(titleKey));
+                final String duriation  ="  [ " + min + " : " + sec + " ]";
+
+                songInfo = (" >> \n " + title + duriation+" path : " + dataPath);
+
+                  songDetails = new SongDetails( dataPath,title,duriation);
+
+                songsListOfPlayList.add(songDetails); ///
             }while (tracks.moveToNext());
 
             DL.p("adding into HashMap : "+playListName);
             playListAndSongsInfo.put(playListName, songsListOfPlayList);
             tracks.close();
         }
-      //  return child_list;
+        //  return child_list;
     }
+    public static  void needtoPlayList(String name,Boolean needToPlay){
+        DL.p("Need to play this list  : "+name);
 
+    }
 }

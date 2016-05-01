@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:background="#abc"
+	android:background="#000"
 	android:layout_height="wrap_content" android:padding="0px" android:minHeight="35dp">
 	<!-- CHILD -->
-	<TextView android:id="@+id/childname" android:paddingLeft="15px" 
-		android:paddingRight="5px" android:focusable="false" 
-		android:layout_marginLeft="10px" android:layout_marginRight="3px" 
+	<TextView android:id="@+id/childname"
+		android:paddingLeft="15px"
+		android:paddingRight="5px"
+		android:focusable="false"
+		android:layout_marginLeft="10px"
+		android:layout_marginRight="3px"
 		android:gravity="center_vertical"
-		android:textColor="#F00"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		android:textColor="#abc"
+		android:textAppearance="?android:textAppearanceMedium"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
 </LinearLayout>

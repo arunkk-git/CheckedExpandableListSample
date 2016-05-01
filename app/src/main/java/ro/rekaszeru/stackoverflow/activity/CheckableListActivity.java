@@ -23,21 +23,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import ro.rekaszeru.stackoverflow.Music.MusicPlayerInfo;
+import ro.rekaszeru.stackoverflow.Music.SongDetails;
 import ro.rekaszeru.stackoverflow.R;
-import ro.rekaszeru.stackoverflow.Utils.DL;
 import ro.rekaszeru.stackoverflow.data.Child;
 import ro.rekaszeru.stackoverflow.data.Parent;
 
 public class CheckableListActivity extends ExpandableListActivity
 {
 	private static final int CHECK_CHANGED = 1;
-    private static final int BUTTON_CLICK =  2;
+	private static final int BUTTON_CLICK =  2;
 	private static final String STR_REGISTERED = " has registered!";
 	private static final String STR_UNREGISTERED = " has unregistered!";
-	
+
 	private ArrayList<Parent> parents;
 	String futureTime ;
 	@Override
@@ -49,7 +48,7 @@ public class CheckableListActivity extends ExpandableListActivity
 		getExpandableListView().setDivider(null);
 		getExpandableListView().setDividerHeight(0);
 		registerForContextMenu(getExpandableListView());
-		
+
 		//TODO: serve with correct data instead of this!
 		final ArrayList<Parent> dummyList = buildDummyData();
 		loadHosts(dummyList);
@@ -61,7 +60,7 @@ public class CheckableListActivity extends ExpandableListActivity
 		// check if the request code is same as what is passed  here it is 2
 		if(requestCode==2)
 		{
-			 futureTime=data.getStringExtra("MESSAGE");
+			futureTime=data.getStringExtra("MESSAGE");
 
 		}}
 
@@ -71,35 +70,34 @@ public class CheckableListActivity extends ExpandableListActivity
 	 */
 	private ArrayList<Parent> buildDummyData()
 	{
-		MusicPlayerInfo musicPlayerInfo =  new  MusicPlayerInfo(this);
 
-		HashMap<String, List<String>>  defaultMusicPlayList = musicPlayerInfo.getdefaultMusicPlayList();
+		MusicPlayerInfo musicPlayerInfo =  new  MusicPlayerInfo(this);
+		HashMap<String, List<SongDetails>>  defaultMusicPlayList = musicPlayerInfo.getdefaultMusicPlayList();
 
 		final ArrayList<Parent> list = new ArrayList<Parent>();
 		Iterator it = defaultMusicPlayList.entrySet().iterator();
-
+		ArrayList<SongDetails> songsDetails;
 		while(it.hasNext()) {
 
-			Map.Entry<String,List<String>> entry= (Map.Entry<String, List<String>>) it.next();
+			Map.Entry<String,List<SongDetails>> entry= (Map.Entry<String, List<SongDetails>>) it.next();
 			final Parent parent = new Parent();
 			String key= entry.getKey();
-            ArrayList<String> songs = (ArrayList<String>) entry.getValue();
+			songsDetails = (ArrayList<SongDetails>) entry.getValue();
 
-
-			parent.setName(key );
+			parent.setName(key);
 //			parent.setChecked((i % 2) == 0);
 			parent.setChildren(new ArrayList<Child>());
-			for (int j = 0; j < songs.size(); j++)
+			for (int j = 0; j < songsDetails.size(); j++)
 			{
 				final Child child = new Child();
-				child.setName(songs.get(j));
+				child.setName(songsDetails.get(j).getTrackName());
 				parent.getChildren().add(child);
 			}
 			list.add(parent);
 		}
 		return list;
 	}
-	
+
 	private void loadHosts(final ArrayList<Parent> newParents)
 	{
 		if (newParents == null)
@@ -124,7 +122,7 @@ public class CheckableListActivity extends ExpandableListActivity
 	{
 		private Handler checkChangeHander = new Handler()
 		{
-			public void handleMessage(Message msg) 
+			public void handleMessage(Message msg)
 			{
 				final Parent parent = (Parent)msg.obj;
 				switch (msg.what)
@@ -132,18 +130,19 @@ public class CheckableListActivity extends ExpandableListActivity
 					case CHECK_CHANGED:
 						((MyExpandableListAdapter)getExpandableListAdapter()).notifyDataSetChanged();
 						break;
-                    case BUTTON_CLICK:
-                        Toast.makeText(getApplicationContext(),"Set Time Button Clicked ",Toast.LENGTH_LONG).show();
-                        break;
+					case BUTTON_CLICK:
+						Toast.makeText(getApplicationContext(),"Set Time Button Clicked ",Toast.LENGTH_LONG).show();
+						break;
 					default:
 						break;
 				}
 				final Boolean checked = parent.isChecked();
-				Toast.makeText(getApplicationContext(), parent.getName() + " " + (checked ? STR_REGISTERED : STR_UNREGISTERED), 
-						Toast.LENGTH_SHORT).show();
+			//	Toast.makeText(getApplicationContext(), parent.getName() + " " + (checked ? STR_REGISTERED : STR_UNREGISTERED),
+			//			Toast.LENGTH_SHORT).show();
+				MusicPlayerInfo.needtoPlayList(parent.getName(),checked);
 			};
 		};
-		
+
 		/**
 		 * @author rekaszeru
 		 *
@@ -167,7 +166,7 @@ public class CheckableListActivity extends ExpandableListActivity
 				checkChangeHander.sendMessage(msg);
 			}
 
-        }
+		}
 
 
 
@@ -179,16 +178,16 @@ public class CheckableListActivity extends ExpandableListActivity
 		}
 
 		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded, 
-				View convertView, ViewGroup parentView)
+		public View getGroupView(int groupPosition, boolean isExpanded,
+								 View convertView, ViewGroup parentView)
 		{
 			final Parent parent = parents.get(groupPosition);
 			convertView = inflater.inflate(R.layout.grouprow, parentView, false);
 			((TextView) convertView.findViewById(R.id.parentname)).setText(parent.getName());
 			CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.checkbox);
-            Button button = (Button) convertView.findViewById(R.id.timeset);
+			Button button = (Button) convertView.findViewById(R.id.timeset);
 
-            checkbox.setChecked(parent.isChecked());
+			checkbox.setChecked(parent.isChecked());
 			if (parent.isChecked())
 				convertView.setBackgroundResource(R.color.red);
 			else
@@ -210,8 +209,8 @@ public class CheckableListActivity extends ExpandableListActivity
 		}
 
 		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, 
-				View convertView, ViewGroup parentView)
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+								 View convertView, ViewGroup parentView)
 		{
 			final Parent parent = parents.get(groupPosition);
 			final Child child = parent.getChildren().get(childPosition);
